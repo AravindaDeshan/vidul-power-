@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Plant Warehouse Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="animated-header">
+            <h1><i class="fas fa-industry"></i> Power Plant Warehouse</h1>
+            <p>Equipment Management System</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="issue">Issue Items</button>
+            <button class="tab-btn" data-tab="return">Return Items</button>
+            <button class="tab-btn" data-tab="reports">Reports</button>
+        </nav>
+
+        <main>
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Active Jobs</h3>
+                        <p id="active-jobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Items Checked Out</h3>
+                        <p id="checked-out">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Recent Activities</h3>
+                        <p id="recent-activities">0</p>
+                    </div>
+                </div>
+                <div class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <table id="activity-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Job ID</th>
+                                <th>Person</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Issue Items Tab -->
+            <div id="issue" class="tab-content">
+                <h2><i class="fas fa-tools"></i> Issue Equipment</h2>
+                <form id="issue-form" class="animated-form">
+                    <div class="form-group">
+                        <label for="job-id">Job ID:</label>
+                        <input type="text" id="job-id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="person-name">Person Name:</label>
+                        <input type="text" id="person-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task">Task:</label>
+                        <input type="text" id="task" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    
+                    <div class="items-container">
+                        <div class="item-row">
+                            <input type="text" class="item-name" placeholder="Item Name" required>
+                            <input type="number" class="item-quantity" min="1" placeholder="Qty" required>
+                            <input type="text" class="item-unit" placeholder="Unit (kg, liters, etc.)" required>
+                            <button type="button" class="remove-item-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="add-item-btn" class="btn-secondary"><i class="fas fa-plus"></i> Add Another Item</button>
+                    <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Issue Items</button>
+                </form>
+            </div>
+
+            <!-- Return Items Tab -->
+            <div id="return" class="tab-content">
+                <h2><i class="fas fa-undo"></i> Return Equipment</h2>
+                <div class="search-container">
+                    <input type="text" id="job-search" placeholder="Search by Job ID or Person...">
+                    <button id="search-btn" class="btn-secondary"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="active-jobs-container">
+                    <h3>Active Jobs</h3>
+                    <table id="active-jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Job ID</th>
+                                <th>Person</th>
+                                <th>Date Issued</th>
+                                <th>Items</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <h2><i class="fas fa-chart-bar"></i> Reports</h2>
+                <div class="report-controls">
+                    <div class="form-group">
+                        <label for="report-month">Select Month:</label>
+                        <input type="month" id="report-month">
+                    </div>
+                    <button id="generate-report" class="btn-primary"><i class="fas fa-file-export"></i> Generate Report</button>
+                </div>
+                <div id="report-results">
+                    <div class="report-summary">
+                        <h3>Monthly Summary</h3>
+                        <div id="summary-stats"></div>
+                    </div>
+                    <div class="report-details">
+                        <h3>Detailed Transactions</h3>
+                        <table id="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Job ID</th>
+                                    <th>Person</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal for Return Confirmation -->
+        <div id="return-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Return Items for Job: <span id="modal-job-id"></span></h2>
+                <form id="return-form">
+                    <div id="return-items-list"></div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-check"></i> Confirm Return</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>Power Plant Warehouse Management System &copy; <span id="current-year"></span></p>
+        </footer>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
